@@ -4,7 +4,7 @@ This project is an interactive visualizer for the N Queen problem, implemented u
 
 ## Preview
 
-![Video preview]([N-Queen-Visualizer Tutorial.mp4](https://github.com/Diveshhhhhh/N-Queen-Visualizer/blob/main/N-Queen-Visualizer%20Tutorial.mp4))
+![Video preview](N-Queen-VisualizerTutorial.gif)
 
 ## Live Site
 
