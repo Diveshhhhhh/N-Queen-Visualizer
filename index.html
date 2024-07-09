@@ -3,25 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>N-Queen Visualizer</title>
+    <title>N Queen Visualizer</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>N-Queen Visualizer</h1>
-    <div>
-        <label for="boardSize">Enter board size (N):</label>
-        <input type="number" id="boardSize" value="8" min="4" max="20">
-        <button onclick="solveNQueens()">Solve</button>
-        <button onclick="resetBoard()">Reset</button>
+    <h1>N-QUEEN VISUALIZER</h1>
+    <div class="controls">
+        <label for="nValue">Enter the value of (N): </label>
+        <input type="number" id="nValue" min="1" value="8">
+        <button onclick="startVisualization()"> Start </button>
+        <br><br>
+        <center>
+        <label for="speedControl">Speed Control: </label>
+        <input type="range" id="speedControl" min="100" max="2000" value="1000">
+        <span id="speedValue">250ms</span>
+        </center>
     </div>
-    <div id="chessboard"></div>
-    <div id="status"></div>
-    <div id="instructions">
-        <h2>Instructions</h2>
-        <p>The N-Queens puzzle is the problem of placing N chess queens on an N×N chessboard so that no two queens threaten each other. This means that no two queens can be in the same row, column, or diagonal.</p>
-        <p>To use this visualizer, enter a board size between 4 and 20, and click "Solve" to see a solution. Click "Reset" to clear the board and start over.</p>
-        <p>Made by - Divesh Thakur ; Reg No. - 12214492</p>
+    <div id="boardContainer">
+        <div id="board"></div>
     </div>
+
     <script src="script.js"></script>
+    <div id="instructions">
+        <h2>INSTRUCTIONS</h2>
+        <p>Welcome to the N Queen Visualizer! This tool demonstrates the solution to the N Queens problem using backtracking.</p>
+        <p>Enter the value of N in the input box and click "Start" to visualize the placement of N queens on an NxN chessboard.</p>
+        <p>The speed control slider adjusts the visualization speed. Faster speeds will animate the solution more quickly.</p>
+        <p>Note: For N = 2 or N = 3, no solution exists.</p>
+        <h4>Made by - DIVESH THAKUR ; Reg No. - 12214492<h4>
+    </div>
 </body>
 </html>
