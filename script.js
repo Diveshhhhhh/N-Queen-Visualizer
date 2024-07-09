@@ -1,76 +1,85 @@
+let n;
 let board = [];
-let chessboard = document.getElementById('chessboard');
-let stepsCounter = 0;
+let speed = 1000;
 
-function createBoard(N) {
-    chessboard.innerHTML = '';
-    chessboard.style.gridTemplateColumns = `repeat(${N}, 50px)`;
-    chessboard.style.gridTemplateRows = `repeat(${N}, 50px)`;
-    for (let i = 0; i < N; i++) {
-        for (let j = 0; j < N; j++) {
-            const square = document.createElement('div');
-            square.classList.add('square', (i + j) % 2 === 0 ? 'white' : 'black');
-            if (board[i][j]) {
-                square.innerHTML = '♛';
-                square.classList.add('queen');
-            }
-            chessboard.appendChild(square);
+document.getElementById('speedControl').addEventListener('input', (event) => {
+    speed = event.target.value;
+    document.getElementById('speedValue').innerText = speed + 'ms';
+});
+
+function startVisualization() {
+    n = parseInt(document.getElementById('nValue').value);
+    if (n === 2 || n === 3) {
+        alert('No solution exists for N = ' + n);
+        return;
+    }
+    board = Array.from({ length: n }, () => Array(n).fill(0));
+    createBoard();
+    solveNQueen(0);
+}
+
+function createBoard() {
+    const boardDiv = document.getElementById('board');
+    boardDiv.innerHTML = '';
+    for (let i = 0; i < n; i++) {
+        const rowDiv = document.createElement('div');
+        rowDiv.className = 'row';
+        for (let j = 0; j < n; j++) {
+            const cellDiv = document.createElement('div');
+            cellDiv.className = `cell ${((i + j) % 2 === 0) ? 'white' : 'black'}`;
+            cellDiv.id = `cell-${i}-${j}`;
+            rowDiv.appendChild(cellDiv);
         }
+        boardDiv.appendChild(rowDiv);
     }
 }
 
-function isSafe(board, row, col, N) {
-    for (let i = 0; i < col; i++) {
-        if (board[row][i]) return false;
+async function solveNQueen(row) {
+    if (row === n) {
+        return true;
     }
-    for (let i = row, j = col; i >= 0 && j >= 0; i--, j--) {
-        if (board[i][j]) return false;
-    }
-    for (let i = row, j = col; i < N && j >= 0; i++, j--) {
-        if (board[i][j]) return false;
-    }
-    return true;
-}
-
-function solveNQueensUtil(board, col, N) {
-    if (col >= N) return true;
-    for (let i = 0; i < N; i++) {
-        if (isSafe(board, i, col, N)) {
-            board[i][col] = true;
-            stepsCounter++;
-            createBoard(N);
-            if (solveNQueensUtil(board, col + 1, N)) return true;
-            board[i][col] = false;
-            stepsCounter++;
-            createBoard(N);
+    for (let col = 0; col < n; col++) {
+        if (isSafe(row, col)) {
+            board[row][col] = 1;
+            await visualizeStep(row, col, true);
+            if (await solveNQueen(row + 1)) {
+                displayQueenIcon(row, col); // Display queen icon on successful placement
+                return true;
+            }
+            board[row][col] = 0;
+            await visualizeStep(row, col, false);
         }
     }
     return false;
 }
 
-function solveNQueens() {
-    const N = parseInt(document.getElementById('boardSize').value);
-    if (N < 4 || N > 20) {
-        alert('Please enter a valid board size between 4 and 20.');
-        return;
+function isSafe(row, col) {
+    for (let i = 0; i < row; i++) {
+        if (board[i][col] === 1) return false;
     }
-    board = Array.from({ length: N }, () => Array(N).fill(false));
-    stepsCounter = 0;
-    document.getElementById('status').innerText = 'Solving...';
-    if (solveNQueensUtil(board, 0, N)) {
-        createBoard(N);
-        document.getElementById('status').innerText = `Solution found in ${stepsCounter} steps!`;
+    for (let i = row, j = col; i >= 0 && j >= 0; i--, j--) {
+        if (board[i][j] === 1) return false;
+    }
+    for (let i = row, j = col; i >= 0 && j < n; i--, j++) {
+        if (board[i][j] === 1) return false;
+    }
+    return true;
+}
+
+async function visualizeStep(row, col, isPlacing) {
+    const cell = document.getElementById(`cell-${row}-${col}`);
+    cell.classList.remove('red', 'queen');
+    if (isPlacing) {
+        cell.classList.add('queen');
     } else {
-        document.getElementById('status').innerText = 'No solution exists.';
+        cell.classList.add('red');
+        await new Promise(r => setTimeout(r, speed / 2));
+        cell.classList.remove('red');
     }
+    await new Promise(r => setTimeout(r, speed));
 }
 
-function resetBoard() {
-    const N = parseInt(document.getElementById('boardSize').value);
-    board = Array.from({ length: N }, () => Array(N).fill(false));
-    stepsCounter = 0;
-    createBoard(N);
-    document.getElementById('status').innerText = '';
+function displayQueenIcon(row, col) {
+    const cell = document.getElementById(`cell-${row}-${col}`);
+    cell.classList.add('queen');
 }
-
-createBoard(8);
