@@ -3,3 +3,5 @@ Reg No - 12214492
 Rno - 23
 College Email - divesh.thakur@lpu.in
 Personal Email - divesht9751@gmail.com
+
+This project is Live : https://n-queen-visualizer74.netlify.app/
