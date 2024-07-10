@@ -1,6 +1,6 @@
 let n;
 let board = [];
-let speed = 1000;
+let speed = 500;
 
 document.getElementById('speedControl').addEventListener('input', (event) => {
     speed = event.target.value;
